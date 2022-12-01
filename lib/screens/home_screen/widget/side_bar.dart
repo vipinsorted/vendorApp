@@ -9,7 +9,7 @@ import '../../sign_in_screen/model/login_model.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({Key? key, required this.activeUser}) : super(key: key);
-  final User activeUser;
+  final User? activeUser;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -37,7 +37,7 @@ class SideBar extends StatelessWidget {
                     height: Insets.lg * 1.125,
                   ),
                   Text(
-                    activeUser.name ?? "",
+                    activeUser?.name ?? "",
                     style: TextStyles.body2.copyWith(
                       fontSize: FontSizes.s16,
                     ),
@@ -46,7 +46,7 @@ class SideBar extends StatelessWidget {
                     height: Insets.xs,
                   ),
                   Text(
-                    activeUser.phoneNumber ?? "",
+                    activeUser?.phoneNumber ?? "",
                     style: TextStyles.body2.copyWith(
                       color: AppTheme.grey,
                       fontWeight: FontWeight.w400,

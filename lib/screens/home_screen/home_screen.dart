@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late User activeUser;
+  User? activeUser;
   PageController _pageController = PageController(
     initialPage: 0,
     keepPage: true,
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   BottomNavigationBar buildBottomNavigationBar() {
     return BottomNavigationBar(
-      currentIndex: _pageController.page!.toInt(),
+      currentIndex: 1,
       onTap: (selectedItem) {},
       items: [
         BottomNavigationBarItem(
