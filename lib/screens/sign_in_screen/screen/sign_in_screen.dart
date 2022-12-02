@@ -6,7 +6,6 @@ import 'package:vendor_app/styles.dart';
 import 'package:vendor_app/widgets/custom_loader.dart';
 import 'package:vendor_app/widgets/new_custom_text_field.dart';
 
-import '../../../themes.dart';
 import '../../../widgets/custom_button.dart';
 import '../controller/signup_controller.dart';
 
@@ -20,17 +19,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   LoginController loginController = Get.put(LoginController());
 
-
   TextEditingController numberController = TextEditingController();
-
-  TextEditingController otpController = TextEditingController();
-
-  String otp = "";
 
   @override
   void dispose() {
     numberController.dispose();
-    otpController.dispose();
     super.dispose();
   }
 
@@ -79,33 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           label: "Enter Mobile Number",
                           keyBoardType: TextInputType.number,
                           // enabled: !loginController.isNumberSubmitted.value,
-                          suffix: Visibility(
-                            visible: loginController.isNumberSubmitted.value,
-                            child: GestureDetector(
-                              onTap: () {
-                                loginController.resetForm();
-                                otpController.clear();
-                              },
-                              child: Text("Edit"),
-                            ),
-                          ),
                         ),
                         SizedBox(
                           height: Insets.xl,
-                        ),
-                        Visibility(
-                          visible: loginController.isNumberSubmitted.value,
-                          child: NewTextField(
-                            onChanged: (newOtp) {
-                              print(newOtp);
-                              otp = newOtp;
-                              setState(() {});
-                            },
-                            maxLength: 6,
-                            controller: otpController,
-                            label: "Enter OTP",
-                            keyBoardType: TextInputType.number,
-                          ),
                         ),
                       ],
                     ),
@@ -114,16 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: Insets.xl,
                   ),
                   CustomButton(
-                    onTap: () {
-                      if (!loginController.isNumberSubmitted.value) {
-                        loginController.fetchOtp(numberController.text);
-                      } else {
-                        loginController.verifyOtp(otp, numberController.text);
-                      }
-                    },
-                    name: !loginController.isNumberSubmitted.value
-                        ? 'Generate OTP'
-                        : 'Log In',
+                    onTap: () => loginController.fetchOtp(numberController.text, context),
+                    name: 'Generate OTP',
                     child: loginController.formStatus.value ==
                             FormzStatus.submissionInProgress
                         ? showCircularLoader()
@@ -131,19 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     disabled:
                         loginController.formStatus.value != FormzStatus.pure,
                   ),
-                  Visibility(
-                    visible: loginController.isNumberSubmitted.value,
-                    child: TextButton(
-                      onPressed: () {
-                        otpController.clear();
-                        loginController.fetchOtp(numberController.text);
-                      },
-                      child: Text(
-                        "Resend OTP",
-                        style: TextStyles.body2.copyWith(color: AppTheme.green),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

@@ -23,6 +23,10 @@ class AppRoutes {
       name: Routes.loginScreen,
       page: () => const LoginScreen(),
     ),
+    GetPage(
+      name: Routes.otpScreen,
+      page: () => const LoginScreen(),
+    ),
   ];
 
   static void toNamed(page, {arguement1, arguement2}) {
@@ -48,4 +52,5 @@ abstract class Routes {
   static const splashScreen = '/SplashScreen';
   static const homeScreen = '/HomeScreen';
   static const loginScreen = '/LoginScreen';
+  static const otpScreen = '/OTPVerifyScreen';
 }
