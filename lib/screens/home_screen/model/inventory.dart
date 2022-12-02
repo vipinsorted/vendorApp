@@ -5,7 +5,7 @@ class InventoryItem {
     required this.quantityPerCrate,
     required this.suffix,
     required this.pricePerCrate,
-    required this.itemName,
+    required this.name,
     required this.imageUrl,
   });
 
@@ -14,32 +14,33 @@ class InventoryItem {
   final int quantityPerCrate;
   final double pricePerCrate;
   final Suffix suffix;
-  final String itemName;
+  final String name;
   final String imageUrl;
 
   factory InventoryItem.fromJson(Map<String, dynamic> data) {
     return InventoryItem(
-      id: data["id"],
-      category: _getCategory(data["category"] as String?),
-      quantityPerCrate: data["quantity_per_crate"],
-      suffix: Suffix.kilogram,
-      pricePerCrate: data["price_per_crate"],
-      itemName: data["item_name"],
-      imageUrl: data["image_url"]
-    );
+        id: data["id"],
+        category: _getCategory(data["category"] as String?),
+        quantityPerCrate: data["quantity_per_crate"],
+        suffix: Suffix.kilogram,
+        pricePerCrate: data["price_per_crate"],
+        name: data["item_name"],
+        imageUrl: data["image_url"]);
   }
-
-
 }
 
-ItemCategory _getCategory (String? data) {
-  return ItemCategory.vegetable;
+ItemCategory _getCategory(String? data) {
+  switch (data?.toLowerCase()) {
+    case "vegetable":
+      return ItemCategory.vegetable;
+    case "fruit":
+      return ItemCategory.fruit;
+    default:
+      return ItemCategory.all;
+  }
 }
 
-enum ItemCategory {
-  vegetable,
-  fruit,
-}
+enum ItemCategory { vegetable, fruit, all }
 
 enum Suffix {
   kilogram,

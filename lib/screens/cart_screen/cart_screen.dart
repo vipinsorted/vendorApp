@@ -18,7 +18,7 @@ class _CartScreenState extends State<CartScreen> {
       () => Container(
         child: Column(
           children: _cartController.cartItems.value.entries
-              .map((e) => Text("${e.value.count} : ${e.value.item.itemName}"))
+              .map((e) => Text("${e.value.count} : ${e.value.item.name}"))
               .toList(),
         ),
       ),

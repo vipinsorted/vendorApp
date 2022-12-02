@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../styles.dart';
@@ -22,17 +23,20 @@ class _InventoryItemTileState extends State<InventoryItemTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ListTile(
-          horizontalTitleGap: 8,
-          contentPadding: EdgeInsets.all(Insets.lg),
-          leading: Image.network(
+    return Obx(() => Padding(
+      padding: EdgeInsets.all(Insets.lg),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.network(
             widget.item.imageUrl,
             fit: BoxFit.cover,
             alignment: Alignment.topCenter,
             width: Insets.xxl * 1.5,
           ),
-          title: Padding(
-            padding: EdgeInsets.zero,
+          Container(
+            margin: EdgeInsets.only(left: Insets.med),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +44,7 @@ class _InventoryItemTileState extends State<InventoryItemTile> {
                 Row(
                   children: [
                     Text(
-                      widget.item.itemName,
+                      widget.item.name,
                       style: TextStyles.body3.copyWith(
                         fontSize: FontSizes.s14,
                       ),
@@ -53,6 +57,9 @@ class _InventoryItemTileState extends State<InventoryItemTile> {
                       style: TextStyles.body2.copyWith(
                         color: AppTheme.grey,
                       ),
+                    ),
+                    SizedBox(
+                      height: Insets.sm * 1.5,
                     ),
                   ],
                 ),
@@ -69,50 +76,81 @@ class _InventoryItemTileState extends State<InventoryItemTile> {
                 SizedBox(
                   height: Insets.med,
                 ),
+                Row(
+                  children: [
+                    Text(
+                      "Rs ${widget.item.pricePerCrate}",
+                      style: TextStyles.body1.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      "/crate",
+                      style: TextStyles.body1,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-          subtitle: Row(
-            children: [
-              Text(
-                "Rs ${widget.item.pricePerCrate}",
-                style: TextStyles.body1.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Text(
-                "/crate",
-                style: TextStyles.body1,
-              ),
-            ],
-          ),
-          trailing: Row(
+          Spacer(),
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Visibility(
                 visible: cartHasItem(),
                 child: GestureDetector(
-                  onTap: () => _cartController.updateItem(widget.item, false),
-                  child: Icon(Icons.remove),
+                  onTap: () =>
+                      _cartController.updateItem(widget.item, false),
+                  child: SizedBox(
+                    width: Insets.med,
+                    child: SvgPicture.asset(
+                      "assets/images/minus.svg",
+                      height: Insets.med,
+                      width: Insets.med,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(
-                width: Insets.lg,
-                child: Center(
-                  child: Text(cartHasItem()
-                      ? _cartController.cartItems.value[widget.item.id]?.count
-                              .toString() ??
-                          "NaN"
-                      : ""),
+              Visibility(
+                visible: cartHasItem(),
+                child: Container(
+                  width: Insets.lg * 1.5,
+                  height: Insets.lg * 1.5,
+                  margin: EdgeInsets.symmetric(horizontal: Insets.lg),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppTheme.borderColor,
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      cartHasItem()
+                          ? _cartController
+                          .cartItems.value[widget.item.id]!.count
+                          .toString()
+                          : "",
+                      style: TextStyles.body2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
               GestureDetector(
-                  onTap: () => _cartController.updateItem(widget.item, true),
-                  child: Icon(Icons.add)),
+                onTap: () =>
+                    _cartController.updateItem(widget.item, true),
+                child: SvgPicture.asset(
+                  "assets/images/plus.svg",
+                  height: Insets.med,
+                ),
+              ),
             ],
           ),
-          // trailing: ,
-        ));
+        ],
+      ),
+    ),);
   }
 
   bool cartHasItem() =>

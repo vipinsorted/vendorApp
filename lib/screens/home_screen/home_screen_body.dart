@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:vendor_app/screens/home_screen/controller/inventory_controller.dart';
 import 'package:vendor_app/screens/home_screen/model/inventory.dart';
 import 'package:vendor_app/screens/home_screen/widget/item_tile.dart';
 
@@ -13,62 +15,63 @@ class HomeScreenBody extends StatefulWidget {
 }
 
 class _HomeScreenBodyState extends State<HomeScreenBody> {
+  InventoryController _inventoryController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Obx(() => Container(
       padding: EdgeInsets.symmetric(
-          horizontal: Insets.lg * 1.5, vertical: Insets.xl),
+        horizontal: Insets.lg * 1.5,
+        vertical: Insets.xl,
+      ),
       child: ListView(
         children: [
           CategorySlider(),
-          ...(List<InventoryItem>.filled(
-                  6,
-                  InventoryItem.fromJson({
-                    "id": 1234,
-                    "category": "Vegetable",
-                    "quantity_per_crate": 10,
-                    "suffix": "KILOGRAM",
-                    "price_per_crate": 220.00,
-                    "item_name": "Baigan",
-                    "image_url":
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png?20150316143248",
-                  }))
+          SizedBox(height: Insets.lg * 1.25,),
+          ..._inventoryController.filteredItemList
               .map(
                 (e) => InventoryItemTile(
-                  item: e,
-                ),
-              )
-              .toList()),
+              item: e,
+            ),
+          )
+              .toList(),
         ],
       ),
-    );
+    ));
   }
 
   Widget CategorySlider() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        NewCustomButton(
-          title: 'All',
-          onTap: () {},
-          selected: true,
-        ),
-        SizedBox(
-          width: Insets.lg,
-        ),
-        NewCustomButton(
-          title: 'Vegetables',
-          onTap: () {},
-        ),
-        SizedBox(
-          width: Insets.lg,
-        ),
-        NewCustomButton(
-          title: 'Fruits',
-          onTap: () {},
-        ),
-      ],
-    );
+    return Obx(() => Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            NewCustomButton(
+              title: 'All',
+              onTap: () =>
+                  _inventoryController.setItemCategory(ItemCategory.all),
+              selected:
+                  _inventoryController.currentCategory == ItemCategory.all,
+            ),
+            SizedBox(
+              width: Insets.lg,
+            ),
+            NewCustomButton(
+              title: 'Vegetables',
+              onTap: () =>
+                  _inventoryController.setItemCategory(ItemCategory.vegetable),
+              selected: _inventoryController.currentCategory ==
+                  ItemCategory.vegetable,
+            ),
+            SizedBox(
+              width: Insets.lg,
+            ),
+            NewCustomButton(
+              title: 'Fruits',
+              onTap: () =>
+                  _inventoryController.setItemCategory(ItemCategory.fruit),
+              selected:
+                  _inventoryController.currentCategory == ItemCategory.fruit,
+            ),
+          ],
+        ));
   }
 }
