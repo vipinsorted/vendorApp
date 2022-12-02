@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vendor_app/screens/home_screen/model/inventory.dart';
+import 'package:vendor_app/screens/home_screen/widget/item_tile.dart';
 
 import '../../styles.dart';
-import '../../themes.dart';
 import '../../widgets/new_custom_button.dart';
 
 class HomeScreenBody extends StatefulWidget {
@@ -13,6 +13,7 @@ class HomeScreenBody extends StatefulWidget {
 }
 
 class _HomeScreenBodyState extends State<HomeScreenBody> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +36,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                   }))
               .map(
                 (e) => InventoryItemTile(
-                  e: e,
+                  item: e,
                 ),
               )
               .toList()),
@@ -68,92 +69,6 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           onTap: () {},
         ),
       ],
-    );
-  }
-}
-
-class InventoryItemTile extends StatelessWidget {
-  const InventoryItemTile({
-    Key? key,
-    required this.e,
-  }) : super(key: key);
-  final InventoryItem e;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      horizontalTitleGap: 8,
-      contentPadding: EdgeInsets.all(Insets.lg),
-      leading: Image.network(
-        e.imageUrl,
-        fit: BoxFit.cover,
-        alignment: Alignment.topCenter,
-        width: Insets.xxl * 1.5,
-      ),
-      title: Padding(
-        padding: EdgeInsets.zero,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  e.itemName,
-                  style: TextStyles.body3.copyWith(
-                    fontSize: FontSizes.s14,
-                  ),
-                ),
-                SizedBox(
-                  width: Insets.med,
-                ),
-                Text(
-                  "(${e.quantityPerCrate} Kg)",
-                  style: TextStyles.body2.copyWith(
-                    color: AppTheme.grey,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Insets.xs * 1.5,
-            ),
-            Text(
-              "1 Kilogram - Rs ${e.pricePerCrate / e.quantityPerCrate}",
-              style: TextStyles.body3.copyWith(
-                fontSize: FontSizes.s11,
-                color: AppTheme.grey,
-              ),
-            ),
-            SizedBox(
-              height: Insets.med,
-            ),
-          ],
-        ),
-      ),
-      subtitle: Row(
-        children: [
-          Text(
-            "Rs ${e.pricePerCrate}",
-            style: TextStyles.body1.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Text(
-            "/crate",
-            style: TextStyles.body1,
-          ),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(onTap: () {}, child: Icon(Icons.add)),
-          Text(1.toString()),
-          GestureDetector(onTap: () {}, child: Icon(Icons.add)),
-        ],
-      ),
-      // trailing: ,
     );
   }
 }

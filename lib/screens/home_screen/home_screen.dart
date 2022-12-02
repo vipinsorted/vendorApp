@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:vendor_app/network/shared_prefs.dart';
 import 'package:vendor_app/screens/home_screen/home_screen_body.dart';
@@ -8,8 +7,8 @@ import 'package:vendor_app/screens/home_screen/widget/side_bar.dart';
 import 'package:vendor_app/screens/sign_in_screen/model/login_model.dart';
 
 import '../../styles.dart';
-import '../../themes.dart';
-import '../cart_screen.dart';
+import '../cart_screen/cart_screen.dart';
+import '../cart_screen/controller/cart_controller.dart';
 import '../wallet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
     initialPage: 0,
     keepPage: true,
   );
-
+  CartController _cartController = Get.put(CartController()); //Do not remove.
+  int activePage = 0;
   @override
   void initState() {
     getCurrentUser();
@@ -66,19 +66,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   BottomNavigationBar buildBottomNavigationBar() {
     return BottomNavigationBar(
-      currentIndex: 1,
-      onTap: (selectedItem) {},
+      currentIndex: activePage,
+      onTap: (selectedItem) {
+        setState(() {
+          setState(() {
+            activePage = selectedItem;
+          });
+        });
+        _pageController.animateToPage(
+          selectedItem,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.bounceIn,
+        );
+      },
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.wallet),
           label: "Wallet",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.shopping_basket_outlined),
           label: "Basket",
         ),
       ],
